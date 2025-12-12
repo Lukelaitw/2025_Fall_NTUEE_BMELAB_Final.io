@@ -86,11 +86,31 @@
   <link rel="stylesheet" href="static/css/bulma.min.css">
   <link rel="stylesheet" href="static/css/index.css">
   
-  <!-- Non-critical CSS - Load asynchronously -->
-  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <!-- Non-critical CSS - Direct load for Safari compatibility -->
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <!-- Safari fallback: Load stylesheets directly if preload fails -->
+  <script>
+    // Safari compatibility: ensure stylesheets load even if preload onload doesn't fire
+    (function() {
+      var links = document.querySelectorAll('link[rel="preload"][as="style"]');
+      links.forEach(function(link) {
+        var timeout = setTimeout(function() {
+          if (link.rel !== 'stylesheet') {
+            link.rel = 'stylesheet';
+          }
+        }, 100);
+        link.onload = function() {
+          clearTimeout(timeout);
+          this.onload = null;
+          this.rel = 'stylesheet';
+        };
+      });
+    })();
+  </script>
   
   <!-- Fallback for browsers that don't support preload -->
   <noscript>
